@@ -17,7 +17,7 @@ spring:
     open-in-view: false
         
   datasource:
-    url: jdbc:mysql://awseb-e-sfmp4gc3s6-stack-awsebrdsdatabase-nsinsgtofuv3.ckdicbbrmhtf.ap-northeast-2.rds.amazonaws.com/ebdb
+    url: jdbc:mysql://awseb-e-ff8gb5k7ju-stack-awsebrdsdatabase-4ujaxjfft0ca.ckdicbbrmhtf.ap-northeast-2.rds.amazonaws.com/ebdb
     username: ebroot
     password: dlekdlek6523
 
