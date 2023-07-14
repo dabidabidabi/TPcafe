@@ -2,6 +2,8 @@ package com.tp.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 import com.tp.entity.MenuOrder;
 import com.tp.repository.MenuOrderRepository;
@@ -18,8 +20,12 @@ public class MenuOrderService {
     	menuOrderRepository.save(menuOrder);
     }
     
+    @Transactional
+    public List<MenuOrder> allOrderList() {
+    	return menuOrderRepository.findAllByOrderByOrderDateDesc();
+    }
     public List<MenuOrder> findOrder(String username) {
-    	return menuOrderRepository.findByUsername(username);
+    	return menuOrderRepository.findByUsernameOrderByOrderDateDesc(username);
     }
     
 }

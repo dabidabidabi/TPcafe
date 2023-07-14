@@ -21,21 +21,20 @@ import org.hibernate.annotations.GenericGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Builder
-@NoArgsConstructor // 湲곕낯�깮�꽦�옄
+@NoArgsConstructor // 기본생성자
 @AllArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper=false)
 @Entity(name = "user")
 @Table(name = "user")
 public class UserEntity extends BaseTimeEntity{
 
-	 @Id // 湲곕낯�궎(Primary key)
+
 	 @GeneratedValue(generator = "system-uuid")
 	 @GenericGenerator(name="system-uuid", strategy = "uuid")
+	 @Id // 기본키(Primary key)
 	 private String id;
 	 @Column(length = 30, nullable=false)
 	 private String username;
@@ -49,8 +48,5 @@ public class UserEntity extends BaseTimeEntity{
 	 private String email;
 	 @Column(length = 30, nullable=false)
 	 private String address;
-	 
-//	 @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//	 private List<Cart> cart;
 
 }

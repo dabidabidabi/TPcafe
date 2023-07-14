@@ -2,6 +2,8 @@ package com.tp.service;
 
 
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +59,9 @@ public class UserService {
 		return userRepository.findByUsername(username);
 	}
 	
+	public Optional<UserEntity> getByUserId(String id) {
+		return userRepository.findById(id);
+	}
 	
 	
 	// 이메일 유효체크

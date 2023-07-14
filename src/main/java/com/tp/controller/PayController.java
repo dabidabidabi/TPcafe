@@ -1,19 +1,20 @@
 package com.tp.controller;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.SimpleDateFormat;
@@ -61,9 +62,9 @@ public class PayController {
 		if(totalQuantity== null || PriceSum == null) {
 			rttr.addFlashAttribute("result", "NO");
 			return "redirect:/nocart";
-//		}else if(totalQuantity== 0 || PriceSum == 0) {
-//			rttr.addFlashAttribute("result", "NO");
-//			return "redirect:/nocart";
+		}else if(totalQuantity== 0 || PriceSum == 0) {
+			rttr.addFlashAttribute("result", "NO");
+			return "redirect:/nocart";
 		}else {
 			String username=(String)session.getAttribute("username");
 			if(username!=null) {
@@ -73,17 +74,17 @@ public class PayController {
 				session.setAttribute("name", userinfo.getName());
 				session.setAttribute("email", userinfo.getEmail());
 				
-				 // �쁽�옱 �궇吏� 諛� �떆媛� 媛��졇�삤湲�
+				 // 현재 날짜 및 시간 가져오기
 		        Date now = new Date();
 
-		        // 二쇰Ц踰덊샇 �삎�떇�쓣 �쐞�븳 �궇吏� 諛� �떆媛� �룷留� 吏��젙
+		        // 주문번호 형식을 위한 날짜 및 시간 포맷 지정
 		        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
-		        // 二쇰Ц踰덊샇 �깮�꽦�쓣 �쐞�븳 �옖�뜡 �닽�옄 �깮�꽦
+		        // 주문번호 생성을 위한 랜덤 숫자 생성
 		        Random random = new Random();
-		        int randomNumber = random.nextInt(900) + 100; // �꽭 �옄由� �옖�뜡 �닽�옄 (100 �씠�긽 999 �씠�븯)
+		        int randomNumber = random.nextInt(900) + 100; // 세 자리 랜덤 숫자 (100 이상 999 이하)
 
-		        // 二쇰Ц踰덊샇 議고빀
+		        // 주문번호 조합
 		        String orderNumber = dateFormat.format(now) + randomNumber;
 		        
 		        session.setAttribute("orderNumber", orderNumber);
@@ -99,7 +100,8 @@ public class PayController {
 	
 	@PostMapping("/cart2")
 	public String cart2(HttpSession session,
-			@RequestParam("menuName") final String menuName, @RequestParam("menuPrice") final Integer menuPrice) {
+			@RequestParam("menuName") final String menuName, 
+			@RequestParam("menuPrice") final Integer menuPrice) {
 			String username=(String)session.getAttribute("username");
 			if(username!=null) {
 				UserEntity userinfo = userService.UserInfo(username);
@@ -108,17 +110,17 @@ public class PayController {
 				session.setAttribute("name", userinfo.getName());
 				session.setAttribute("email", userinfo.getEmail());
 				session.setAttribute("menuName", menuName);
-				 // �쁽�옱 �궇吏� 諛� �떆媛� 媛��졇�삤湲�
+				 // 현재 날짜 및 시간 가져오기
 		        Date now = new Date();
 
-		        // 二쇰Ц踰덊샇 �삎�떇�쓣 �쐞�븳 �궇吏� 諛� �떆媛� �룷留� 吏��젙
+		        // 주문번호 형식을 위한 날짜 및 시간 포맷 지정
 		        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
-		        // 二쇰Ц踰덊샇 �깮�꽦�쓣 �쐞�븳 �옖�뜡 �닽�옄 �깮�꽦
+		        // 주문번호 생성을 위한 랜덤 숫자 생성
 		        Random random = new Random();
-		        int randomNumber = random.nextInt(900) + 100; // �꽭 �옄由� �옖�뜡 �닽�옄 (100 �씠�긽 999 �씠�븯)
+		        int randomNumber = random.nextInt(900) + 100; // 세 자리 랜덤 숫자 (100 이상 999 이하)
 
-		        // 二쇰Ц踰덊샇 議고빀
+		        // 주문번호 조합
 		        String orderNumber = dateFormat.format(now) + randomNumber;
 		        
 		        session.setAttribute("orderNumber", orderNumber);
@@ -127,9 +129,7 @@ public class PayController {
 			}else {
 				return "redirect:/sessionover";
 			}	
-		
-		
-		
+
 	}
 	
 	@GetMapping("/success")
@@ -155,20 +155,19 @@ public class PayController {
 	
 	@GetMapping("/success2")
 	public String successs(HttpSession session) {
+		
 	    String username = (String) session.getAttribute("username");
 	    String orderNumber = (String)session.getAttribute("orderNumber");
 	    UserEntity user = userService.UserInfo(username);
 	    String menuName = (String) session.getAttribute("menuName");
 	    Menu menuList = menuService.findByName(menuName);
 	   
-	    	MenuOrder menuOrder = new MenuOrder();
-	    	menuOrder.setUsername(user.getName());
-	    	menuOrder.setQuantity(1);
-	    	menuOrder.setMenuId(menuList);
-	    	menuOrder.setOrderNumber(orderNumber);
-	    	menuOrderService.saveOrder(menuOrder);
-	    	
-	   
+    	MenuOrder menuOrder = new MenuOrder();
+    	menuOrder.setUsername(user.getName());
+    	menuOrder.setQuantity(1);
+    	menuOrder.setMenuId(menuList);
+    	menuOrder.setOrderNumber(orderNumber);
+    	menuOrderService.saveOrder(menuOrder);
 
 	    return "pay/success";
 	}

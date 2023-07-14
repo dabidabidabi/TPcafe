@@ -83,9 +83,11 @@ public class UserController {
 	@PostMapping("/join")
 	public String joinUser(UserDTO userDTO, RedirectAttributes rttr){
 
-		UserEntity user = UserEntity.builder().username(userDTO.getUsername()).name(userDTO.getName()).password(userDTO.getPassword()).phone(userDTO.getPhone()).email(userDTO.getEmail()).address(userDTO.getAddress()).build();
+		UserEntity user = 
+				UserEntity.builder().username(userDTO.getUsername()).name(userDTO.getName())
+									.password(userDTO.getPassword()).phone(userDTO.getPhone())
+									.email(userDTO.getEmail()).address(userDTO.getAddress()).build();
 		
-//		firebaseService.insertUser(userDTO.getId() ,userDTO.getName(), userDTO.getAddress(), userDTO.getEmail(),userDTO.getPassword(), userDTO.getPhone(), userDTO.getUsername());
 		final String username = userDTO.getUsername();
 		final String email = userDTO.getEmail();
 		if(userService.idCheck(username)==0) {
@@ -126,12 +128,13 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public String loginUser(@RequestParam("username") final String username, @RequestParam("password") final String password,Model model, HttpSession session, RedirectAttributes rttr){
+	public String loginUser(
+			@RequestParam("username") final String username, 
+			@RequestParam("password") final String password, Model model, HttpSession session, RedirectAttributes rttr){
 		
 		UserEntity user= userService.UserInfo(username);
 		
 		if(userService.loginChek(username, password)==0) {
-//			UserEntity user = userService.getByCredentials(username, password);
 			rttr.addFlashAttribute("result", "OK");
 			session.setAttribute("username", username);
 			session.setAttribute("name", user.getName());
@@ -184,8 +187,6 @@ public class UserController {
 		 return "redirect:/sessionover";
 	}
 	
-	
-	
 	@PostMapping("/pwupdate")
 	public String pwupdate(HttpSession session, @RequestParam("password") final String password) {
 		UserEntity user = (UserEntity)session.getAttribute("user");
@@ -196,9 +197,10 @@ public class UserController {
 		return "/user/mypage";
 	}
 	
-	// 비밀번호 찾기 
+	   // 비밀번호 찾기 
 	   @PostMapping("pwupdate2")
-	   public String lostPwChange(@RequestParam("username") String username,@RequestParam("password") final String password, RedirectAttributes rttr) {
+	   public String lostPwChange(@RequestParam("username") String username,
+			   @RequestParam("password") final String password, RedirectAttributes rttr) {
 		  UserEntity user = userService.UserInfo(username);
 			if(userService.idCheck(username)==0) {
 				rttr.addFlashAttribute("result", "OK");
@@ -223,13 +225,11 @@ public class UserController {
 			return "/user/delete";
 		}
 		 return "redirect:/sessionover";
-		
-		
-	
 	}
 	
 	@PostMapping("/delete")
-	public String delete(HttpSession session, @RequestParam("password") final String password) {
+	public String delete(HttpSession session, 
+			@RequestParam("password") final String password) {
 		if(session.getAttribute("id")!=null) {
 			String id=(String)session.getAttribute("id");
 			UserEntity user = (UserEntity)session.getAttribute("user");
@@ -244,18 +244,15 @@ public class UserController {
 			
 			return "redirect:/sessionover";
 		}
-		
 	}
 	
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) {
 	       
 		   session.invalidate();
-	        
-	        
-		   return "redirect:/";        
-	        
-}
+ 
+		   return "redirect:/";            
+	}
 	
 
 	@GetMapping("/sessionover")
@@ -271,7 +268,8 @@ public class UserController {
 	}
 	
 	@PostMapping("/IdFind")
-	public String IdFind(@RequestParam("name") final String name, @RequestParam("email") final String email, RedirectAttributes rttr) {
+	public String IdFind(@RequestParam("name") final String name, 
+			@RequestParam("email") final String email, RedirectAttributes rttr) {
 		if(userService.emailExists(email)==1) {
 			UserEntity user = userService.infoToEmail(email);
 			if(user.getName().equals(name)) {
@@ -297,7 +295,8 @@ public class UserController {
 	
 	@PostMapping("/PwFind")
 	@ResponseBody
-	public String PwFind(@RequestParam("username") final String username, @RequestParam("email") final String email,
+	public String PwFind(@RequestParam("username") final String username, 
+			@RequestParam("email") final String email,
 	         UserEntity userEntity) {
 		UserEntity user= userService.UserInfo(username);
 		   try {
@@ -316,18 +315,9 @@ public class UserController {
 			HttpSession session) {
 		
 		String name = (String)session.getAttribute("name");
-		
 		System.out.println("name : " + name);
 		
 		List<MenuOrder> list = menuOrderService.findOrder(name);
-//		List<Object> orderList = new ArrayList<>();
-//		for(int i =0; i<list.size(); i++) {
-//			orderList = new ArrayList<>();
-//			orderList.add(list.get(i).getMenuId().getName());
-//			orderList.add(list.get(i).getMenuId().getPrice());
-//			
-//		}
-//		model.addAttribute("menuNamePrice",oderList);
 		model.addAttribute("menuOrderList", list);
 		
 		System.out.println("model List : "+list);
@@ -336,3 +326,4 @@ public class UserController {
 		return "user/myorder";
 	}
 }
+

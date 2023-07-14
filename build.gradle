@@ -1,14 +1,17 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.7.14-SNAPSHOT'
+	id 'org.springframework.boot' version '2.7.11-SNAPSHOT'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
 group = 'com.tp'
 version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
 
-java {
-	sourceCompatibility = '11'
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
 }
 
 repositories {
@@ -18,26 +21,28 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	//implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
-	//runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
 	implementation group: 'org.webjars', name: 'jquery', version: '3.6.0'
+	
 	implementation "org.apache.tomcat.embed:tomcat-embed-jasper"
 	implementation "javax.servlet:jstl"
+	
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
 
 	//spring email
 	implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.1'
 
-	// https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
-	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.33'
    
    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
 }
 
 tasks.named('test') {

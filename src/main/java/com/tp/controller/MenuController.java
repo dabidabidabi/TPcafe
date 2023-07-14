@@ -117,39 +117,39 @@ public class MenuController {
 	   }
 
 	   
-	   @PostMapping("/drinkOrder")
-		public String drinkOrderP(Model model, HttpSession session, UserEntity user, Cart cart, RedirectAttributes rttr,
-				@RequestParam("quantity") Integer quantity, @RequestParam("id") Long id,
-				@RequestParam("menuName") String menuname) {
-
-			String username = (String) session.getAttribute("username");
-			Integer menuOrder = (Integer) session.getAttribute(menuname);
-
-			if (username != null) {
-				user = userService.UserInfo(username);
-				cart = cartService.getCartByUserAndMenu(user, menuService.selectOne(id));
-
-				// 장바구니에 새로 추가할 때
-				if (cart == null) {
-					cart = Cart.builder().quantity(quantity).menu(menuService.selectOne(id)).user(user).build();
-
-					cartService.cartSave(cart);
-					session.setAttribute(menuname, 1);
-				} else {
-					// 기존에 있는 품목에 수량을 추가할 때(cart != null일 때)
-					cart.setQuantity(cart.getQuantity() + quantity);
-					cartService.cartSave(cart);
-				}
-
-				model.addAttribute("cart", cart);
-				rttr.addFlashAttribute("order", "OK");
-				return "redirect:/orderResult";
-			} else {
-				rttr.addFlashAttribute("order", "login");
-				return "redirect:/orderResult";
-			}
-
-	   }
+//	   @PostMapping("/drinkOrder")
+//		public String drinkOrderP(Model model, HttpSession session, UserEntity user, Cart cart, RedirectAttributes rttr,
+//				@RequestParam("quantity") Integer quantity, @RequestParam("id") Long id,
+//				@RequestParam("menuName") String menuname) {
+//
+//			String username = (String) session.getAttribute("username");
+//			Integer menuOrder = (Integer) session.getAttribute(menuname);
+//
+//			if (username != null) {
+//				user = userService.UserInfo(username);
+//				cart = cartService.getCartByUserAndMenu(user, menuService.selectOne(id));
+//
+//				// 장바구니에 새로 추가할 때
+//				if (cart == null) {
+//					cart = Cart.builder().quantity(quantity).menu(menuService.selectOne(id)).user(user).build();
+//
+//					cartService.cartSave(cart);
+//					session.setAttribute(menuname, 1);
+//				} else {
+//					// 기존에 있는 품목에 수량을 추가할 때(cart != null일 때)
+//					cart.setQuantity(cart.getQuantity() + quantity);
+//					cartService.cartSave(cart);
+//				}
+//
+//				model.addAttribute("cart", cart);
+//				rttr.addFlashAttribute("order", "OK");
+//				return "redirect:/orderResult";
+//			} else {
+//				rttr.addFlashAttribute("order", "login");
+//				return "redirect:/orderResult";
+//			}
+//
+//	   }
 	   
 	   @RequestMapping("/orderResult")
 		public String orderResult() {

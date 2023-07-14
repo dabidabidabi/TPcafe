@@ -17,11 +17,10 @@ spring:
     open-in-view: false
         
   datasource:
-    url: jdbc:mysql://awseb-e-ff8gb5k7ju-stack-awsebrdsdatabase-4ujaxjfft0ca.ckdicbbrmhtf.ap-northeast-2.rds.amazonaws.com/ebdb
+    url: jdbc:mysql://awseb-e-3iyg4m23ym-stack-awsebrdsdatabase-dnhmc35lvxah.cp66ubjknwwd.ap-northeast-2.rds.amazonaws.com/ebdb
     username: ebroot
     password: dlekdlek6523
 
-    
   mvc:
     view:
       prefix: WEB-INF/views/
